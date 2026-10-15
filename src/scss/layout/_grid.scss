@@ -1,0 +1,29 @@
+@use "../abstracts" as a;
+
+.container {
+  width: 100%;
+  max-width: 1280px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: a.space("4");
+  padding-right: a.space("4");
+
+  @include a.respond-to("md") {
+    padding-left: a.space("6");
+    padding-right: a.space("6");
+  }
+}
+
+.grid {
+  display: grid;
+  gap: a.space("4");
+  grid-template-columns: 1fr;
+
+  @include a.respond-to("sm") {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @include a.respond-to("lg") {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}

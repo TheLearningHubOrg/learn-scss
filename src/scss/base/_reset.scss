@@ -1,0 +1,17 @@
+@use "../abstracts" as a;
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: a.$font-family-base;
+  background-color: a.color("background");
+  color: a.color("text");
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}

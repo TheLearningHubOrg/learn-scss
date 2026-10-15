@@ -1,0 +1,24 @@
+@use "sass:map";
+@use "sass:math";
+@use "variables" as v;
+
+// Convert pixels to rem
+@function rem($px, $base: 16px) {
+  @return math.div($px, $base) * 1rem;
+}
+
+// Token color accessor
+@function color($key) {
+  @if not map.has-key(v.$colors, $key) {
+    @error "Invalid color key: `#{$key}`. Valid keys: #{map.keys(v.$colors)}";
+  }
+  @return map.get(v.$colors, $key);
+}
+
+// Token spacing accessor
+@function space($key) {
+  @if not map.has-key(v.$spacing, $key) {
+    @error "Invalid spacing key: `#{$key}`. Valid keys: #{map.keys(v.$spacing)}";
+  }
+  @return map.get(v.$spacing, $key);
+}

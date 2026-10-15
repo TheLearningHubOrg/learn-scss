@@ -1,0 +1,33 @@
+@use "sass:color";
+@use "../abstracts" as a;
+
+.btn {
+  @include a.flex-center;
+  display: inline-flex;
+  padding: a.space("2") a.space("4");
+  font-size: a.rem(14px);
+  font-weight: 600;
+  border-radius: a.rem(8px);
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+
+  &--primary {
+    background-color: a.color("primary");
+    color: #ffffff;
+
+    &:hover {
+      background-color: a.color("primary-dark");
+    }
+  }
+
+  &--secondary {
+    background-color: a.color("surface");
+    border-color: a.color("border");
+    color: a.color("text");
+
+    &:hover {
+      background-color: color.scale(a.color("surface"), $lightness: 10%);
+    }
+  }
+}

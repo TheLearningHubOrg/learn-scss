@@ -1,0 +1,20 @@
+@use "../abstracts" as a;
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 700;
+  line-height: 1.25;
+  margin-bottom: a.space("3");
+}
+
+h1 { font-size: a.rem(36px); }
+h2 { font-size: a.rem(30px); }
+h3 { font-size: a.rem(24px); }
+
+p {
+  margin-bottom: a.space("4");
+  color: a.color("text-muted");
+}
+
+code, pre {
+  font-family: a.$font-family-mono;
+}

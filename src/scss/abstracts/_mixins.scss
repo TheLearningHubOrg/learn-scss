@@ -1,0 +1,28 @@
+@use "sass:map";
+@use "variables" as v;
+
+// Mobile-first responsive breakpoint mixin
+@mixin respond-to($breakpoint) {
+  @if map.has-key(v.$breakpoints, $breakpoint) {
+    $value: map.get(v.$breakpoints, $breakpoint);
+    @media screen and (min-width: $value) {
+      @content;
+    }
+  } @else {
+    @error "Invalid breakpoint: `#{$breakpoint}`. Valid breakpoints: #{map.keys(v.$breakpoints)}";
+  }
+}
+
+// Flex centering shorthand
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+// Truncate single line text
+@mixin text-truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

@@ -1,0 +1,26 @@
+@use "../abstracts" as a;
+
+.card {
+  background-color: a.color("surface");
+  border: 1px solid a.color("border");
+  border-radius: a.rem(12px);
+  padding: a.space("6");
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
+
+  &__header {
+    margin-bottom: a.space("4");
+    border-bottom: 1px solid a.color("border");
+    padding-bottom: a.space("2");
+  }
+
+  &__title {
+    font-size: a.rem(20px);
+    font-weight: 700;
+    color: a.color("text");
+  }
+
+  &__body {
+    font-size: a.rem(15px);
+    color: a.color("text-muted");
+  }
+}

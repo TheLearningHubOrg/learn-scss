@@ -1,23 +1,26 @@
 {
   "name": "learn-scss",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Modern SCSS & Enterprise Design Systems Architecture Masterclass (Dart Sass).",
+  "main": "src/index.js",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/manthanank/learn-scss.git"
+    "start": "node src/index.js",
+    "compile": "sass src/scss/main.scss dist/main.css",
+    "test": "node --test tests/scss.test.js"
   },
   "keywords": [
-    "scss"
+    "scss",
+    "sass",
+    "dart-sass",
+    "css",
+    "design-system",
+    "7-1-pattern",
+    "bem"
   ],
   "author": "Manthan Ank",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/manthanank/learn-scss/issues"
-  },
-  "homepage": "https://github.com/manthanank/learn-scss#readme"
+  "license": "MIT",
+  "dependencies": {
+    "sass": "^1.79.4"
+  }
 }

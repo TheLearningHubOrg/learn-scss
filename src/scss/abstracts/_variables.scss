@@ -1,0 +1,35 @@
+// Design Tokens: Color Palettes & Scales
+$colors: (
+  "primary": #4f46e5,
+  "primary-dark": #4338ca,
+  "secondary": #64748b,
+  "accent": #06b6d4,
+  "background": #0f172a,
+  "surface": #1e293b,
+  "text": #f8fafc,
+  "text-muted": #94a3b8,
+  "border": #334155
+);
+
+// Spacing Scale (4px base multiplier)
+$spacing: (
+  "1": 0.25rem,
+  "2": 0.5rem,
+  "3": 0.75rem,
+  "4": 1rem,
+  "6": 1.5rem,
+  "8": 2rem,
+  "12": 3rem
+);
+
+// Responsive Breakpoints
+$breakpoints: (
+  "sm": 640px,
+  "md": 768px,
+  "lg": 1024px,
+  "xl": 1280px
+);
+
+// Typography Scale
+$font-family-base: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+$font-family-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
