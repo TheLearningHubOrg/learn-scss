@@ -1,20 +1,32 @@
 @use "../abstracts" as a;
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3 {
+  margin: 0 0 a.space(3);
   font-weight: 700;
-  line-height: 1.25;
-  margin-bottom: a.space("3");
+  line-height: 1.2;
 }
 
-h1 { font-size: a.rem(36px); }
-h2 { font-size: a.rem(30px); }
-h3 { font-size: a.rem(24px); }
+// Fluid headings: no media queries, the size tracks the viewport width.
+h1 {
+  font-size: a.fluid(32px, 48px);
+}
+
+h2 {
+  font-size: a.fluid(24px, 32px);
+}
+
+h3 {
+  font-size: a.rem(20px);
+}
 
 p {
-  margin-bottom: a.space("4");
-  color: a.color("text-muted");
+  margin: 0 0 a.space(4);
+  color: var(--color-text-muted);
 }
 
-code, pre {
+code,
+pre {
   font-family: a.$font-family-mono;
 }

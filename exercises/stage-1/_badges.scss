@@ -1,0 +1,14 @@
+// Stage 1 exercise solution. Copy to src/scss/components/_badges.scss, change
+// the @use path to "../abstracts", and add @use "components/badges"; to main.scss.
+@use "../../src/scss/abstracts" as a;
+
+.badge {
+  padding: a.space(1) a.space(2);
+  font-size: a.rem(12px);
+  border-radius: 999px;
+
+  &--warning {
+    color: a.on-color(a.palette("warning"));
+    background-color: a.palette("warning");
+  }
+}

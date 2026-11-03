@@ -1,0 +1,12 @@
+// Module configuration: `with (...)` reaches the !default variables through
+// the @forward rules in abstracts/_index.scss. This file loads the module with
+// a 20px root, so it is a separate compilation from the other test files.
+@use "true" as *;
+@use "../src/scss/abstracts" as a with ($root-font-size: 20px);
+
+@include describe("@use ... with") {
+  @include it("reconfigures rem() for the whole compilation") {
+    @include assert-equal(a.rem(20px), 1rem);
+    @include assert-equal(a.$root-font-size, 20px);
+  }
+}

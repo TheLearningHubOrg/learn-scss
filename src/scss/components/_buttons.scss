@@ -1,33 +1,44 @@
-@use "sass:color";
 @use "../abstracts" as a;
 
+// One modifier per entry. The text colour is computed from the background, so
+// adding a variant cannot ship an unreadable button.
+$variants: (
+  "primary": a.palette("primary"),
+  "accent": a.palette("accent"),
+  "warning": a.palette("warning"),
+  "danger": a.palette("danger"),
+);
+
 .btn {
-  @include a.flex-center;
-  display: inline-flex;
-  padding: a.space("2") a.space("4");
+  @include a.flex-center(inline-flex);
+
+  gap: a.space(2);
+  padding: a.space(2) a.space(4);
   font-size: a.rem(14px);
   font-weight: 600;
-  border-radius: a.rem(8px);
   border: 1px solid transparent;
+  border-radius: a.rem(8px);
   cursor: pointer;
-  transition: all 0.2s ease-in-out;
+  transition: background-color 0.15s ease-in-out;
 
-  &--primary {
-    background-color: a.color("primary");
-    color: #ffffff;
+  // Nested rules come after the declarations, so .btn compiles to one rule.
+  @include a.focus-ring(a.palette("accent"));
 
-    &:hover {
-      background-color: a.color("primary-dark");
+  @each $name, $background in $variants {
+    &--#{$name} {
+      color: a.on-color($background);
+      background-color: $background;
+
+      &:hover {
+        // shade() darkens in OKLCH, so every hue loses the same perceived lightness.
+        background-color: a.shade($background, 8%);
+      }
     }
   }
 
-  &--secondary {
-    background-color: a.color("surface");
-    border-color: a.color("border");
-    color: a.color("text");
-
-    &:hover {
-      background-color: color.scale(a.color("surface"), $lightness: 10%);
-    }
+  &--ghost {
+    color: var(--color-text);
+    background-color: transparent;
+    border-color: var(--color-border);
   }
 }

@@ -1,24 +1,97 @@
+@use "sass:color";
 @use "sass:map";
 @use "sass:math";
+@use "sass:meta";
 @use "variables" as v;
 
-// Convert pixels to rem
-@function rem($px, $base: 16px) {
-  @return math.div($px, $base) * 1rem;
+// Private: the leading hyphen keeps this out of the module's public API.
+// stylelint-disable-next-line number-max-precision -- exact value from the sRGB spec
+$-srgb-linear-threshold: 0.04045;
+
+/// Converts a px length to rem against the configured root font size.
+/// @param {Number} $px - A length in px, or 0.
+/// @return {Number} The same length in rem.
+@function rem($px) {
+  @if $px == 0 {
+    @return 0;
+  }
+
+  @if meta.type-of($px) != "number" or math.unit($px) != "px" {
+    @error "rem() expects a px length, got `#{meta.inspect($px)}`.";
+  }
+
+  @return math.div($px, v.$root-font-size) * 1rem;
 }
 
-// Token color accessor
-@function color($key) {
+/// Looks up a colour token and fails the build on a typo.
+@function palette($key) {
   @if not map.has-key(v.$colors, $key) {
-    @error "Invalid color key: `#{$key}`. Valid keys: #{map.keys(v.$colors)}";
+    @error "Unknown colour token `#{$key}`. Known tokens: #{map.keys(v.$colors)}.";
   }
+
   @return map.get(v.$colors, $key);
 }
 
-// Token spacing accessor
-@function space($key) {
-  @if not map.has-key(v.$spacing, $key) {
-    @error "Invalid spacing key: `#{$key}`. Valid keys: #{map.keys(v.$spacing)}";
+/// Looks up a spacing token, for example space(4) returns 1rem.
+@function space($step) {
+  @if not map.has-key(v.$spacing, $step) {
+    @error "Unknown spacing step `#{$step}`. Known steps: #{map.keys(v.$spacing)}.";
   }
-  @return map.get(v.$spacing, $key);
+
+  @return map.get(v.$spacing, $step);
+}
+
+// Private: converts one gamma-encoded sRGB channel (0-255) to linear light.
+@function -to-linear($channel) {
+  $c: math.div($channel, 255);
+
+  @if $c <= $-srgb-linear-threshold {
+    @return math.div($c, 12.92);
+  }
+
+  @return math.pow(math.div($c + 0.055, 1.055), 2.4);
+}
+
+/// WCAG 2 relative luminance of a colour, from 0 (black) to 1 (white).
+@function luminance($color) {
+  $r: -to-linear(color.channel($color, "red", $space: rgb));
+  $g: -to-linear(color.channel($color, "green", $space: rgb));
+  $b: -to-linear(color.channel($color, "blue", $space: rgb));
+
+  @return 0.2126 * $r + 0.7152 * $g + 0.0722 * $b;
+}
+
+/// WCAG 2 contrast ratio between two colours, from 1 to 21.
+@function contrast-ratio($a, $b) {
+  $la: luminance($a);
+  $lb: luminance($b);
+
+  @return math.div(math.max($la, $lb) + 0.05, math.min($la, $lb) + 0.05);
+}
+
+/// Picks whichever of $light or $dark has the higher contrast on $background.
+@function on-color($background, $light: #fff, $dark: map.get(v.$colors, "ink")) {
+  @if contrast-ratio($background, $light) >= contrast-ratio($background, $dark) {
+    @return $light;
+  }
+
+  @return $dark;
+}
+
+/// Darkens a colour by $amount of OKLCH lightness, then maps the result back
+/// into the sRGB gamut so it serialises as a plain, displayable rgb() colour.
+@function shade($color, $amount) {
+  $darker: color.adjust($color, $lightness: $amount * -1, $space: oklch);
+
+  @return color.to-gamut($darker, $space: rgb, $method: local-minde);
+}
+
+/// Fluid size: grows linearly from $min to $max between the two viewports.
+/// fluid(16px, 28px) with the default 320px-1280px range returns
+/// clamp(1rem, 0.75rem + 1.25vw, 1.75rem).
+@function fluid($min, $max, $min-vw: v.$fluid-min-viewport, $max-vw: v.$fluid-max-viewport) {
+  $slope: math.div($max - $min, $max-vw - $min-vw);
+  $intercept: $min - $slope * $min-vw;
+
+  @return clamp(rem($min), rem($intercept) + $slope * 100vw, rem($max));
 }

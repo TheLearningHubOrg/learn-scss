@@ -1,3 +1,6 @@
+// Barrel file: one `@use "abstracts"` gives access to every token, function and
+// mixin. Configuration passed to `@use "abstracts" with (...)` flows through
+// these @forward rules to the !default variables in _variables.scss.
 @forward "variables";
 @forward "functions";
 @forward "mixins";

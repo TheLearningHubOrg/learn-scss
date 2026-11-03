@@ -1,0 +1,33 @@
+// Stage 3 exercise solution: a nested token lookup that fails loudly.
+@use "sass:map";
+@use "sass:meta";
+
+$tokens: (
+  "color": (
+    "brand": (
+      500: #4f46e5,
+      600: #4338ca,
+    ),
+  ),
+  "radius": (
+    "sm": 4px,
+    "md": 8px,
+  ),
+);
+
+/// token("color", "brand", 500) walks $tokens one key at a time.
+@function token($path...) {
+  $node: $tokens;
+  $trail: "$tokens";
+
+  @each $key in $path {
+    @if meta.type-of($node) != "map" or not map.has-key($node, $key) {
+      @error "Unknown token key #{$key} under #{$trail}.";
+    }
+
+    $node: map.get($node, $key);
+    $trail: "#{$trail}.#{$key}";
+  }
+
+  @return $node;
+}

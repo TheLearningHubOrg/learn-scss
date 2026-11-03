@@ -1,0 +1,12 @@
+@use "true" as *;
+@use "tokens" as t;
+
+@include describe("token()") {
+  @include it("walks nested maps with rest arguments") {
+    @include assert-equal(t.token("color", "brand", 500), #4f46e5);
+  }
+
+  @include it("reads a top-level group") {
+    @include assert-equal(t.token("radius", "md"), 8px);
+  }
+}

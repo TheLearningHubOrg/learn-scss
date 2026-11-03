@@ -1,0 +1,44 @@
+// Output tests for the mixins in src/scss/abstracts/_mixins.scss.
+@use "true" as *;
+@use "../src/scss/abstracts" as a;
+
+@include describe("respond-to()") {
+  @include it("wraps @content in a min-width media query from the token map") {
+    @include assert {
+      @include output {
+        .panel {
+          @include a.respond-to("md") {
+            padding: 2rem;
+          }
+        }
+      }
+
+      @include expect {
+        @media (min-width: 768px) {
+          .panel {
+            padding: 2rem;
+          }
+        }
+      }
+    }
+  }
+}
+
+@include describe("focus-ring()") {
+  @include it("only styles :focus-visible") {
+    @include assert {
+      @include output {
+        .link {
+          @include a.focus-ring(#06b6d4);
+        }
+      }
+
+      @include expect {
+        .link:focus-visible {
+          outline: 2px solid #06b6d4;
+          outline-offset: 2px;
+        }
+      }
+    }
+  }
+}

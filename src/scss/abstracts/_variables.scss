@@ -1,35 +1,48 @@
-// Design Tokens: Color Palettes & Scales
+// Design tokens: the single source of truth for every value the components use.
+// Each token is declared with !default, so a consumer can override it once with
+// `@use "abstracts" with ($root-font-size: 18px)` before anything else loads it.
+
+// Root font size that rem() divides by. Matches the browser default.
+$root-font-size: 16px !default;
+
+// Colour palette. Components read it through palette(), never directly.
 $colors: (
   "primary": #4f46e5,
-  "primary-dark": #4338ca,
-  "secondary": #64748b,
   "accent": #06b6d4,
-  "background": #0f172a,
+  "warning": #facc15,
+  "danger": #dc2626,
+  "ink": #0f172a,
   "surface": #1e293b,
+  "background": #0f172a,
   "text": #f8fafc,
   "text-muted": #94a3b8,
-  "border": #334155
-);
+  "border": #334155,
+) !default;
 
-// Spacing Scale (4px base multiplier)
+// Spacing scale on a 4px grid. Numeric keys: space(4) is 1rem.
 $spacing: (
-  "1": 0.25rem,
-  "2": 0.5rem,
-  "3": 0.75rem,
-  "4": 1rem,
-  "6": 1.5rem,
-  "8": 2rem,
-  "12": 3rem
-);
+  0: 0,
+  1: 0.25rem,
+  2: 0.5rem,
+  3: 0.75rem,
+  4: 1rem,
+  6: 1.5rem,
+  8: 2rem,
+  12: 3rem,
+) !default;
 
-// Responsive Breakpoints
+// Mobile-first breakpoints used by respond-to().
 $breakpoints: (
   "sm": 640px,
   "md": 768px,
   "lg": 1024px,
-  "xl": 1280px
-);
+  "xl": 1280px,
+) !default;
 
-// Typography Scale
-$font-family-base: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-$font-family-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+// Viewport range that fluid() interpolates across.
+$fluid-min-viewport: 320px !default;
+$fluid-max-viewport: 1280px !default;
+
+// Font stacks. Unquoted names are lowercase because CSS keywords are case-insensitive.
+$font-family-base: system-ui, -apple-system, "Segoe UI", roboto, sans-serif !default;
+$font-family-mono: ui-monospace, sfmono-regular, menlo, consolas, monospace !default;

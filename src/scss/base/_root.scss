@@ -1,0 +1,13 @@
+@use "../abstracts" as a;
+
+// Publishes the Sass tokens as CSS custom properties so the browser (and
+// JavaScript) can read and override them at runtime.
+:root {
+  @each $name, $value in a.$colors {
+    --color-#{$name}: #{$value};
+  }
+
+  @each $step, $value in a.$spacing {
+    --space-#{$step}: #{$value};
+  }
+}

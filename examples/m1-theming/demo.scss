@@ -1,0 +1,10 @@
+// npx sass --no-source-map examples/m1-theming/demo.scss
+@use "theme-engine" as theme;
+
+@include theme.themes;
+
+.btn-primary {
+  color: var(--color-on-primary);
+  background: theme.token("color", "primary");
+  border-radius: theme.token("radius", "md");
+}

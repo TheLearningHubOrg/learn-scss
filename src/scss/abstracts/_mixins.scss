@@ -1,26 +1,34 @@
 @use "sass:map";
 @use "variables" as v;
 
-// Mobile-first responsive breakpoint mixin
+/// Mobile-first media query from a breakpoint token.
+/// @include respond-to("md") { ... } emits @media (min-width: 768px) { ... }
 @mixin respond-to($breakpoint) {
-  @if map.has-key(v.$breakpoints, $breakpoint) {
-    $value: map.get(v.$breakpoints, $breakpoint);
-    @media screen and (min-width: $value) {
-      @content;
-    }
-  } @else {
-    @error "Invalid breakpoint: `#{$breakpoint}`. Valid breakpoints: #{map.keys(v.$breakpoints)}";
+  @if not map.has-key(v.$breakpoints, $breakpoint) {
+    @error "Unknown breakpoint `#{$breakpoint}`. Known breakpoints: #{map.keys(v.$breakpoints)}.";
+  }
+
+  @media (min-width: map.get(v.$breakpoints, $breakpoint)) {
+    @content;
   }
 }
 
-// Flex centering shorthand
-@mixin flex-center {
-  display: flex;
+/// Centres children on both axes. Pass inline-flex for inline elements.
+@mixin flex-center($display: flex) {
+  display: $display;
   align-items: center;
   justify-content: center;
 }
 
-// Truncate single line text
+/// Keyboard-only focus outline that does not show on mouse click.
+@mixin focus-ring($color, $width: 2px, $offset: 2px) {
+  &:focus-visible {
+    outline: $width solid $color;
+    outline-offset: $offset;
+  }
+}
+
+/// Truncates a single line of text with an ellipsis.
 @mixin text-truncate {
   overflow: hidden;
   text-overflow: ellipsis;

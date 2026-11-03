@@ -1,17 +1,62 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Learn SCSS starter</title>
+    <!-- Built by `npm run build` from src/scss/main.scss -->
+    <link rel="stylesheet" href="css/main.css" />
+  </head>
+  <body>
+    <main class="container">
+      <h1>Learn SCSS starter</h1>
+      <p>
+        Every value on this page comes from the token maps in
+        <code>src/scss/abstracts/_variables.scss</code>. Resize the window: the
+        headings scale with <code>fluid()</code> and the grid gains columns at
+        the <code>sm</code> and <code>lg</code> breakpoints.
+      </p>
 
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Webpage</title>
-    <link rel="stylesheet" href="/public/style.css">
-</head>
+      <section class="grid" aria-label="Button variants">
+        <article class="card card--highlight">
+          <header class="card__header">
+            <h2 class="card__title">Buttons</h2>
+          </header>
+          <div class="card__body">
+            <p>Text colour is picked by <code>on-color()</code> for contrast.</p>
+            <button class="btn btn--primary" type="button">Primary</button>
+            <button class="btn btn--accent" type="button">Accent</button>
+            <button class="btn btn--warning" type="button">Warning</button>
+            <button class="btn btn--danger" type="button">Danger</button>
+            <button class="btn btn--ghost" type="button">Ghost</button>
+          </div>
+        </article>
 
-<body>
-    <h1>Welcome to the Page</h1>
-    <script src="/public/script.js"></script>
-</body>
+        <article class="card">
+          <header class="card__header">
+            <h2 class="card__title">Module system</h2>
+          </header>
+          <div class="card__body">
+            <p>
+              Partials load each other with <code>@use</code>; the
+              <code>abstracts/_index.scss</code> barrel re-exports tokens,
+              functions and mixins with <code>@forward</code>.
+            </p>
+          </div>
+        </article>
 
+        <article class="card">
+          <header class="card__header">
+            <h2 class="card__title">Tested in SCSS</h2>
+          </header>
+          <div class="card__body">
+            <p>
+              <code>npm test</code> runs the sass-true suites in
+              <code>tests/*.test.scss</code> on Node's test runner.
+            </p>
+          </div>
+        </article>
+      </section>
+    </main>
+  </body>
 </html>

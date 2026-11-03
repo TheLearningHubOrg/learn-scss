@@ -1,0 +1,27 @@
+// Stage 2 exercise solution: a second brand built from the starter's modules
+// without editing src/. Compile with:
+//   npx sass --no-source-map exercises/stage-2/brand.scss
+@use "sass:meta";
+
+// Configure the abstracts module on its first load. Replacing $colors replaces
+// the whole map, so every key the components use must be present.
+@use "../../src/scss/abstracts" as a with (
+  $colors: (
+    "primary": #be185d,
+    "accent": #06b6d4,
+    "warning": #facc15,
+    "danger": #dc2626,
+    "ink": #0f172a,
+    "surface": #1e293b,
+    "background": #0f172a,
+    "text": #f8fafc,
+    "text-muted": #94a3b8,
+    "border": #334155,
+  )
+);
+
+// Emit the buttons scoped under .brand-b. The buttons module reuses the
+// configured abstracts instance loaded above.
+.brand-b {
+  @include meta.load-css("../../src/scss/components/buttons");
+}

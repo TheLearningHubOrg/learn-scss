@@ -1,0 +1,24 @@
+@use "true" as *;
+@use "theme-engine" as theme;
+
+@include describe("M1 theme engine") {
+  @include it("turns a token path into a var() reference") {
+    @include assert-equal(theme.token("color", "primary"), var(--color-primary));
+  }
+
+  @include it("emits only the overridden properties for a theme") {
+    @include assert {
+      @include output {
+        @include theme.themes;
+      }
+
+      @include contains {
+        [data-theme="high-contrast"] {
+          --color-text: #000;
+          --color-primary: #1e1b8a;
+          --color-on-primary: #fff;
+        }
+      }
+    }
+  }
+}

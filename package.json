@@ -1,26 +1,32 @@
 {
   "name": "learn-scss",
-  "version": "1.0.0",
-  "description": "Modern SCSS & Enterprise Design Systems Architecture Masterclass (Dart Sass).",
-  "main": "src/index.js",
+  "version": "1.2.0",
+  "private": true,
+  "description": "Learn SCSS with Dart Sass: a 7-stage guide and a tested design-system starter.",
   "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
   "scripts": {
-    "start": "node src/index.js",
-    "compile": "sass src/scss/main.scss dist/main.css",
-    "test": "node --test tests/scss.test.js"
+    "build": "sass --no-source-map --style=compressed --fatal-deprecation=dart-sass-2 src/scss/main.scss public/css/main.css",
+    "dev": "sass --watch --embed-sources src/scss/main.scss public/css/main.css",
+    "lint": "stylelint \"src/scss/**/*.scss\"",
+    "test": "node --test tests/sass.test.js"
   },
   "keywords": [
     "scss",
     "sass",
     "dart-sass",
     "css",
-    "design-system",
-    "7-1-pattern",
+    "design-tokens",
     "bem"
   ],
-  "author": "Manthan Ank",
+  "author": "Manthan Ankolekar",
   "license": "MIT",
-  "dependencies": {
-    "sass": "^1.79.4"
+  "devDependencies": {
+    "sass": "^1.107.1",
+    "sass-true": "^10.1.0",
+    "stylelint": "^17.16.0",
+    "stylelint-config-standard-scss": "^17.0.0"
   }
 }

@@ -1,0 +1,110 @@
+// M1 worked example: Sass token trees compiled into runtime themes.
+// The base theme is emitted in full at :root; every other theme emits only
+// the custom properties it changes, plus a contrast-checked text colour.
+@use "sass:list";
+@use "sass:map";
+@use "sass:meta";
+@use "../../src/scss/abstracts" as a;
+
+$base-theme: (
+  "color": (
+    "background": #ffffff,
+    "surface": #f8fafc,
+    "text": #0f172a,
+    "primary": #4f46e5,
+  ),
+  "radius": (
+    "md": 8px,
+  ),
+) !default;
+
+$theme-overrides: (
+  "dark": (
+    "color": (
+      "background": #0f172a,
+      "surface": #1e293b,
+      "text": #f8fafc,
+      "primary": #818cf8,
+    ),
+  ),
+  "high-contrast": (
+    "color": (
+      "text": #000,
+      "primary": #1e1b8a,
+    ),
+  ),
+) !default;
+
+// Fails the build if an override names a token the base theme does not have.
+@mixin -check($override, $path...) {
+  @each $key, $value in $override {
+    // Rest arguments must come last, so build the full key path as a list.
+    $full: list.append($path, $key, $separator: comma);
+
+    @if not map.has-key($base-theme, $full...) {
+      @error "Theme override `#{$full}` is not a base token.";
+    }
+
+    @if meta.type-of($value) == "map" {
+      @include -check($value, $full...);
+    }
+  }
+}
+
+// Flattens ("color": ("text": #000)) into --color-text: #000.
+@mixin -emit($tree, $prefix: "") {
+  @each $key, $value in $tree {
+    $name: if(sass($prefix == ""): $key; else: "#{$prefix}-#{$key}");
+
+    @if meta.type-of($value) == "map" {
+      @include -emit($value, $name);
+    } @else {
+      --#{$name}: #{meta.inspect($value)};
+    }
+  }
+}
+
+// Text colour for primary buttons, computed from the resolved theme.
+@mixin -on-primary($resolved) {
+  --color-on-primary: #{a.on-color(map.get($resolved, "color", "primary"))};
+}
+
+@mixin themes {
+  :root {
+    @include -emit($base-theme);
+    @include -on-primary($base-theme);
+  }
+
+  @each $name, $override in $theme-overrides {
+    @include -check($override);
+
+    [data-theme="#{$name}"] {
+      @include -emit($override);
+      @include -on-primary(map.deep-merge($base-theme, $override));
+    }
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme]) {
+      $dark: map.get($theme-overrides, "dark");
+
+      @include -emit($dark);
+      @include -on-primary(map.deep-merge($base-theme, $dark));
+    }
+  }
+}
+
+/// var() reference with a compile-time check that the token exists.
+@function token($path...) {
+  @if not map.has-key($base-theme, $path...) {
+    @error "Unknown theme token #{$path}.";
+  }
+
+  $name: "";
+
+  @each $part in $path {
+    $name: if(sass($name == ""): $part; else: "#{$name}-#{$part}");
+  }
+
+  @return var(--#{$name});
+}

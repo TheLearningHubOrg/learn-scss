@@ -1,7 +1,9 @@
-// Modern Dart Sass 7-1 Architectural Manifest
-@use "abstracts" as *;
+// Entry point. It holds no rules of its own: it only decides load order.
+// Abstracts emit no CSS; base sets element defaults; layout and components
+// follow so that their class selectors come later in the cascade.
+@use "base/root";
 @use "base/reset";
 @use "base/typography";
+@use "layout/grid";
 @use "components/buttons";
 @use "components/cards";
-@use "layout/grid";

@@ -1,0 +1,72 @@
+// Unit tests for the pure functions in src/scss/abstracts/_functions.scss.
+@use "sass:color";
+@use "sass:math";
+@use "true" as *;
+@use "../src/scss/abstracts" as a;
+
+@include describe("rem()") {
+  @include it("divides px by the 16px root font size") {
+    @include assert-equal(a.rem(24px), 1.5rem);
+    @include assert-equal(a.rem(14px), 0.875rem);
+  }
+
+  @include it("returns a unitless 0 for 0") {
+    @include assert-equal(a.rem(0), 0);
+  }
+}
+
+@include describe("palette() and space()") {
+  @include it("read values from the token maps") {
+    @include assert-equal(a.palette("primary"), #4f46e5);
+    @include assert-equal(a.space(4), 1rem);
+    @include assert-equal(a.space(0), 0);
+  }
+}
+
+@include describe("contrast-ratio()") {
+  @include it("is 21 for black on white and 1 for a colour on itself") {
+    @include assert-equal(a.contrast-ratio(#000, #fff), 21);
+    @include assert-equal(a.contrast-ratio(#4f46e5, #4f46e5), 1);
+  }
+
+  @include it("passes WCAG AA (4.5:1) for white on the primary colour") {
+    @include assert-true(a.contrast-ratio(#fff, a.palette("primary")) >= 4.5);
+  }
+}
+
+@include describe("on-color()") {
+  @include it("picks white text on a dark background") {
+    @include assert-equal(a.on-color(#4f46e5), #fff);
+  }
+
+  @include it("picks ink text on a light background") {
+    @include assert-equal(a.on-color(#facc15), a.palette("ink"));
+  }
+}
+
+@include describe("shade()") {
+  @include it("removes OKLCH lightness and stays inside the sRGB gamut") {
+    $result: a.shade(#fff, 10%);
+
+    @include assert-equal(math.round(color.channel($result, "lightness", $space: oklch)), 90%);
+    @include assert-true(color.is-in-gamut($result, $space: rgb));
+  }
+
+  @include it("returns the same colour for a 0% shade") {
+    @include assert-true(color.same(a.shade(#4f46e5, 0%), #4f46e5));
+  }
+}
+
+@include describe("fluid()") {
+  @include it("emits a clamp() that grows between 320px and 1280px") {
+    @include assert {
+      @include output {
+        font-size: a.fluid(16px, 28px);
+      }
+
+      @include expect {
+        font-size: clamp(1rem, 0.75rem + 1.25vw, 1.75rem);
+      }
+    }
+  }
+}
